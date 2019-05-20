@@ -1,0 +1,87 @@
+avihu.dekel
+shaharbirzon
+
+
+=============================
+=      File description     =
+=============================
+Description by Packages.
+
+Methods :
+contains an abstract Method class, a void method that inherits from it.
+also contains a factory for future expanding to other method types, and a method exception.
+
+Conditions:
+contains classes for If and While conditions, and their exception.
+
+Scopes:
+Contains a class that represent a scope in the code - that is composed by every method, condition and the global scope.
+scope contains the variables and methods of it, and has a connection to it's father, to search upwards.
+contains an exception for an unresolved scope.
+
+Variables:
+contains an abstract Variable class, and all allowed variables inherits from it. (boolean, String, char, etc..)
+contains a factory for creating the variables, using overloading for comfort use.
+also contains an exception for variables.
+
+Handlers:
+contains the 'Handler' interface to classes that wish to analyse a code line - it has to have a pattern to verify
+if the line matches, and an action - if a line does match.
+also contains the 'HandlerFactory', that creates all different implementations of handlers.
+
+main:
+contains the LineReader, and loops the code from line to line, and goes over and runs the handlers.
+contains one exception for an unrecognized line, and a father exception for all code exceptions 'InvalidCode'.
+also contains the main - Sjavac, that reads the global scope (skips methods content),
+and then repeats and reads the methods.
+
+
+
+=============================
+=          Design           =
+=============================
+used Polymorphism in the Handlers - by creating all classes that share an interface. makes the code more modular,
+and prevents code repetition and bugs. the factory provides different list of possible handlers, depends on the scope
+type. the factory is Singleton, since there's no use for more than one instance.
+
+Variables and Methods are abstract - since there is not a general Method, but a void method Is a method. it's subclasses
+only contain the specific changes from the Methods.
+
+Methods, Conditions (inner scopes) and the global scope composes a scope - and add all it's variables and methods to it.
+also every scope composes it's parent, for searches in outer scopes.
+
+While inherits from the If condition, since it's an upgrade of an if. allows code reuse.
+
+
+=============================
+=  Implementation details   =
+=============================
+the first read contains the read of the global scope - adds variables and method's signature to it.
+the second read iterates and reads the methods.
+
+
+=============================
+=    Answers to questions   =
+=============================
+
+Error handling
+=======
+we have created an exception for every package (Variables, Methods, Scopes, etc').
+each one implements to string, and contains a name if possible.
+all our code exceptions inherit from a father exception, to have a common shared father.
+
+OOP design
+======
+1. to add float handling we'll create it's class, and simply add it to the factory. the design supports it.
+2. add the following:
+    -- int method - need to create it's class, and add it to the factory. also need to add a possibility to assign a
+         value from a method call. (currently not supported, but should be easy)
+    -- classes - create class for classes, make changes in the main scope to support them, and move the methods
+        into the classes scope from the global scope. each class will contain it's scope.
+
+Regular expressions
+=======
+- valid variable name: checks for a letter in the beginning, and afterwards a type of word, or a _
+    and after it must contain a letter.
+- declaration pattern: checks for a valid type, afterwards a valid variable name, '=' and then the value.
+    and of course must have ';'
